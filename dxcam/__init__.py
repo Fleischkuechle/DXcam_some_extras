@@ -142,17 +142,11 @@ class DXFactory(metaclass=Singleton):
         _output:list[dict]=[]
         for didx, outputs in enumerate(self.outputs):
             for idx, output in enumerate(outputs):
-                width, height = self.extract_width_height_generic(output.resolution)
-                #print(width)
-                #print(height)
-                bla:str=self.output_metadata.get(output.devicename)[1]
+                width, height = self.extract_width_height_generic(str(output.resolution))
                 #monitor:dict={"Monitor:":idx,"Resolution:":output.resolution,"Primary:":bla}
                 monitor:dict={"Monitor:":idx,"width":width,"height":height,"Primary:":self.output_metadata.get(output.devicename)[1]}
                 _output.append(monitor)
-                _output.update(monitor)
-                #ret += f"Device[{didx}] Output[{idx}]: "
-                #ret += f"Res:{output.resolution} Rot:{output.rotation_angle}"
-                #ret += f" Primary:{self.output_metadata.get(output.devicename)[1]}\n"
+
         return _output
 
 
