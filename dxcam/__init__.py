@@ -99,7 +99,7 @@ class DXFactory(metaclass=Singleton):
         for _, camera in self._camera_instances.items():
             camera.release()
    
-    def extract_width_height_generic(input_str: str) -> tuple:
+    def extract_width_height_generic(self,input_str: str) -> tuple:
         '''
         Example:
         teststring = "(1980,2300)"
