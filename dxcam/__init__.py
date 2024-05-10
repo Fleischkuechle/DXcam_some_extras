@@ -98,18 +98,7 @@ class DXFactory(metaclass=Singleton):
     def clean_up(self):
         for _, camera in self._camera_instances.items():
             camera.release()
-
-    def Get_MonitorResolutions(self)->dict:
-        _output:dict={}
-        for didx, outputs in enumerate(self.outputs):
-            for idx, output in enumerate(outputs):
-                width, height = self.extract_width_height_generic(output.resolution)
-                monitor:dict={"Monitor":idx,"width":width,"height":height,"Primary":self.output_metadata.get(output.devicename)[1]}
-                _output.update(monitor)
-                #ret += f"Device[{didx}] Output[{idx}]: "
-                #ret += f"Res:{output.resolution} Rot:{output.rotation_angle}"
-                #ret += f" Primary:{self.output_metadata.get(output.devicename)[1]}\n"
-        return _output
+   
 
     
 
@@ -130,7 +119,18 @@ class DXFactory(metaclass=Singleton):
         else:
             return None, None
 
-
+    #newly added
+    def get_monitor_resolutions(self)->dict:
+        _output:dict={}
+        for didx, outputs in enumerate(self.outputs):
+            for idx, output in enumerate(outputs):
+                width, height = self.extract_width_height_generic(output.resolution)
+                monitor:dict={"Monitor":idx,"width":width,"height":height,"Primary":self.output_metadata.get(output.devicename)[1]}
+                _output.update(monitor)
+                #ret += f"Device[{didx}] Output[{idx}]: "
+                #ret += f"Res:{output.resolution} Rot:{output.rotation_angle}"
+                #ret += f" Primary:{self.output_metadata.get(output.devicename)[1]}\n"
+        return _output
 
 
 
@@ -159,3 +159,7 @@ def device_info():
 
 def output_info():
     return __factory.output_info()
+
+#newly added
+def get_monitor_resolutions():
+    return __factory.get_monitor_resolutions()
