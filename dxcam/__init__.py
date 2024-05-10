@@ -99,10 +99,7 @@ class DXFactory(metaclass=Singleton):
         for _, camera in self._camera_instances.items():
             camera.release()
    
-
-    
-        
-    def extract_width_height_generic(self,input_str: str) -> tuple:
+    def extract_width_height_generic(input_str: str) -> tuple:
         '''
         Example:
         teststring = "(1980,2300)"
@@ -110,6 +107,7 @@ class DXFactory(metaclass=Singleton):
         should return width= 1980  heiht=2300
         '''
         input_str = input_str.replace("(", "").replace(")", "")  # Entferne Klammern aus dem Eingabestring
+        input_str = input_str.replace(" ", "")
         res_match = re.search(r'(\d+),(\d+)', input_str)
         
         if res_match:
@@ -118,6 +116,24 @@ class DXFactory(metaclass=Singleton):
             return width, height
         else:
             return None, None
+    
+        
+    # def extract_width_height_generic(self,input_str: str) -> tuple:
+    #     '''
+    #     Example:
+    #     teststring = "(1980,2300)"
+    #     width, height = extract_width_height_generic(input_str=teststring)
+    #     should return width= 1980  heiht=2300
+    #     '''
+    #     input_str = input_str.replace("(", "").replace(")", "")  # Entferne Klammern aus dem Eingabestring
+    #     res_match = re.search(r'(\d+),(\d+)', input_str)
+        
+    #     if res_match:
+    #         width = int(res_match.group(1))
+    #         height = int(res_match.group(2))
+    #         return width, height
+    #     else:
+    #         return None, None
 
     
     # def extract_width_height_generic(self,input_str: str) -> tuple:
@@ -142,7 +158,8 @@ class DXFactory(metaclass=Singleton):
         _output:list[dict]=[]
         for didx, outputs in enumerate(self.outputs):
             for idx, output in enumerate(outputs):
-                width, height = self.extract_width_height_generic(str(output.resolution))
+                temp:str=output.resolution
+                width, height = self.extract_width_height_generic(input_str=temp)
                 #monitor:dict={"Monitor:":idx,"Resolution:":output.resolution,"Primary:":bla}
                 monitor:dict={"Monitor:":idx,"width":width,"height":height,"Primary:":self.output_metadata.get(output.devicename)[1]}
                 _output.append(monitor)
