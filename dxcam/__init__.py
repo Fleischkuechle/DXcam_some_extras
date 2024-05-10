@@ -101,16 +101,16 @@ class DXFactory(metaclass=Singleton):
    
 
     
-
+        
     def extract_width_height_generic(self,input_str: str) -> tuple:
-        '''# Example usage
-        input_string = 'Res:(1920, 1200)'
-        width, height = extract_width_height_generic(input_string)
-        print("Width:", width)
-        print("Height:", height)
         '''
-        # Using regular expression to extract the resolution values
-        res_match = re.search(r'Res:$((\d+), (\d+))$', input_str)
+        Example:
+        teststring = "(1980,2300)"
+        width, height = extract_width_height_generic(input_str=teststring)
+        should return width= 1980  heiht=2300
+        '''
+        input_str = input_str.replace("(", "").replace(")", "")  # Entferne Klammern aus dem Eingabestring
+        res_match = re.search(r'(\d+),(\d+)', input_str)
         
         if res_match:
             width = int(res_match.group(1))
@@ -119,16 +119,36 @@ class DXFactory(metaclass=Singleton):
         else:
             return None, None
 
+    
+    # def extract_width_height_generic(self,input_str: str) -> tuple:
+    #     '''# Example usage
+    #     input_string = 'Res:(1920, 1200)'
+    #     width, height = extract_width_height_generic(input_string)
+    #     print("Width:", width)
+    #     print("Height:", height)
+    #     '''
+    #     # Using regular expression to extract the resolution values
+    #     res_match = re.search(r'Res:$((\d+), (\d+))$', input_str)
+        
+    #     if res_match:
+    #         width = int(res_match.group(1))
+    #         height = int(res_match.group(2))
+    #         return width, height
+    #     else:
+    #         return None, None
+
     #newly added
-    def get_monitor_resolutions(self):
-        _output:dict={}
+    def get_monitor_resolutions(self)->list[dict]:
+        _output:list[dict]=[]
         for didx, outputs in enumerate(self.outputs):
             for idx, output in enumerate(outputs):
-                #width, height = self.extract_width_height_generic(output.resolution)
+                width, height = self.extract_width_height_generic(output.resolution)
                 #print(width)
                 #print(height)
                 bla:str=self.output_metadata.get(output.devicename)[1]
-                monitor:dict={"Monitor:":idx,"Resolution:":output.resolution,"Primary:":bla}
+                #monitor:dict={"Monitor:":idx,"Resolution:":output.resolution,"Primary:":bla}
+                monitor:dict={"Monitor:":idx,"width":width,"height":height,"Primary:":self.output_metadata.get(output.devicename)[1]}
+                _output.append(monitor)
                 _output.update(monitor)
                 #ret += f"Device[{didx}] Output[{idx}]: "
                 #ret += f"Res:{output.resolution} Rot:{output.rotation_angle}"
@@ -164,7 +184,8 @@ def output_info():
     return __factory.output_info()
 
 #newly added
-def get_monitor_resolutions():
-    test=__factory.get_monitor_resolutions()
-    return test
+def get_monitor_resolutions()->list[dict]:
+    # test=__factory.get_monitor_resolutions()
+    # return test
+    return __factory.get_monitor_resolutions()
 
