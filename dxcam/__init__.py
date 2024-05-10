@@ -106,8 +106,8 @@ class DXFactory(metaclass=Singleton):
         width, height = extract_width_height_generic(input_str=teststring)
         should return width= 1980  heiht=2300
         '''
-        input_str = input_str.replace("(", "").replace(")", "")  # Entferne Klammern aus dem Eingabestring
-        input_str = input_str.replace(" ", "")
+        input_str = input_str.replace("(", "").replace(")", "").replace(" ", "")  # Entferne Klammern aus dem Eingabestring
+        #input_str = input_str.replace(" ", "")
         res_match = re.search(r'(\d+),(\d+)', input_str)
         
         if res_match:
@@ -158,7 +158,7 @@ class DXFactory(metaclass=Singleton):
         _output:list[dict]=[]
         for didx, outputs in enumerate(self.outputs):
             for idx, output in enumerate(outputs):
-                temp:str=output.resolution
+                temp:str=str(output.resolution)
                 width, height = self.extract_width_height_generic(input_str=temp)
                 #monitor:dict={"Monitor:":idx,"Resolution:":output.resolution,"Primary:":bla}
                 monitor:dict={"Monitor:":idx,"width":width,"height":height,"Primary:":self.output_metadata.get(output.devicename)[1]}
