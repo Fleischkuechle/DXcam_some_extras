@@ -120,12 +120,15 @@ class DXFactory(metaclass=Singleton):
             return None, None
 
     #newly added
-    def get_monitor_resolutions(self)->dict:
+    def get_monitor_resolutions(self):
         _output:dict={}
         for didx, outputs in enumerate(self.outputs):
             for idx, output in enumerate(outputs):
                 width, height = self.extract_width_height_generic(output.resolution)
-                monitor:dict={"Monitor":idx,"width":width,"height":height,"Primary":self.output_metadata.get(output.devicename)[1]}
+                print(width)
+                print(height)
+                bla:str=self.output_metadata.get(output.devicename)[1]
+                monitor:dict={"Monitor":idx,"width":width,"height":height,"Primary":bla}
                 _output.update(monitor)
                 #ret += f"Device[{didx}] Output[{idx}]: "
                 #ret += f"Res:{output.resolution} Rot:{output.rotation_angle}"
@@ -162,4 +165,6 @@ def output_info():
 
 #newly added
 def get_monitor_resolutions():
-    return __factory.get_monitor_resolutions()
+    test=__factory.get_monitor_resolutions()
+    return test
+
